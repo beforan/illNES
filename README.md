@@ -29,7 +29,13 @@ You'll need a C++ compiler and linker, not too much else.
 
 illNES has been successfully compiled under the following environments:
 
-* MinGW only for now.
+* MinGW (GCC)
+* Visual Studio 2013 (MSBuild)
+  * Create project from existing files
+  * Add SDL2 via Nuget
+  * Exclude any files you don't want the entry point from (e.g. `mem-test.cpp`)
+  * ????
+  * Profit!
 
 ### Configuration
 There is none at this time
@@ -44,7 +50,7 @@ Please don't try and compile with both those files; they both declare `main()`!
 Other than those two, you should probably include all other source files ;)
 
 ### Dependencies
-Currently qndDisplay depends upon SDL, so you'll need to link against that for your platform.
+Currently qndDisplay depends upon SDL2, so you'll need to link against that for your platform. In Modern Visual Studio this can be added via Nuget :)
 
 No other dependencies at this time.
 
