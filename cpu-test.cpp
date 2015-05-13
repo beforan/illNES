@@ -5,7 +5,7 @@
 #include "BaseMemoryInterface.hpp"
 #include "Log.hpp"
 #include "qndDisplay.hpp"
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 int main(int argc, char** argv) {
 

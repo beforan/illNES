@@ -10,7 +10,7 @@ enum PFlagBits { fCbit = 0, fZbit, fIbit, fDbit, fBbit, fRbit, fVbit, fNbit };
 
 enum AddrModes {
   Abs_ = 0x5, AbsX = 0x1D, AbsY = 0x9D,
-  Acc_ = 0x80, Imm_ = 0x1, Imp_ = 0, Rel_ = 0x3,
+  Acc_ = 0x80, Imm_ = 0x1, Imp_ = 0, Rel_ = 0x83,
   Ind_ = 0x7, IndX = 0x73, IndY = 0x9F,
   ZPg_ = 0x3, ZPgX = 0x33, ZPgY = 0xB3
 };
@@ -47,6 +47,7 @@ protected:
   void flagZN(uint8_t reg); //checks the provided value (from a register!) and sets the Z and N flags accordingly
   uint8_t bcd2dec(uint8_t val);
   uint8_t dec2bcd(uint8_t val);
+  int8_t uint2int(uint8_t val);
   
   bool reset, nmi, irq; //internal interrupt flags
   int skipCycles; //how many more cycles to skip before we fetch the next opcode

@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 #include "BaseMemoryInterface.hpp"
 #include "Log.hpp"

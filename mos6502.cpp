@@ -240,6 +240,16 @@ uint8_t mos6502::bcd2dec(uint8_t val) {
 uint8_t mos6502::dec2bcd(uint8_t val) {
 	return ( (val/10*16) + (val%10) );
 }
+//Signed int converter
+int8_t mos6502::uint2int(uint8_t val) {
+	int8_t result = (val < 128) ? val : val - 256;
+
+	*Log::Output << "uint2int: Value as signed byte: 0x" << std::hex
+		<< std::setw(2) << std::setfill('0') << (signed)result << "(" << std::dec
+		<< (signed)result << ")" << std::endl;
+
+	return result;
+}
 
 uint16_t mos6502::getAddress(AddrModes mode) {
 	/*
@@ -267,7 +277,7 @@ uint16_t mos6502::getAddress(AddrModes mode) {
 	 Indirect : 00000111 : 0x07
 	 IndirectX: 01110011 : 0x73
 	 IndirectY: 10011111 : 0x9F
-	 Relative : 00000011 : 0x03 //relative looks like zero page, but the address is used as an offset by BRANCH instructions
+	 Relative : 10000011 : 0x83 //relative looks like zero page, but the address is used as an offset by BRANCH instructions. X/Y flag used to differentiate.
 	 Implied  : 00000000 : 0x00 //no address needed for either of these, so step bits are all 0
 	 Accumulat: 10000000 : 0x80 //but we use the X/Y flag bit to differentiate them
 	 */
@@ -357,14 +367,21 @@ int mos6502::exec(Instruction* op, uint16_t address) {
 
 	int skipExtra = 0; //how many extra cycles to skip, if any
 	uint8_t value = 0; //set the value up here as many instructions will need it
-	if (op->Mode == Acc_)
+	switch (op->Mode) {
+	case Acc_:
 		value = A; //here we handle Accumulator "addressing" mode, when we set the value
-	else
-		value = M->Read(address);
+		break;
+	case Rel_:
+		value = address; //Relative addressing uses the zero-paged address directly as an offset, not its value!
+		break;
+	default:
+		value = M->Read(address); //All other modes get the byte value at the address
+	}
+
 	*Log::Output << "exec: Instruction: " << op->Mnemonic << " 0x" << std::hex
 			<< std::setw(2) << std::setfill('0') << (unsigned) op->OpCode
 			<< std::endl;
-	*Log::Output << "exec: Value: " << std::hex << std::setw(2)
+	*Log::Output << "exec: Value: 0x" << std::hex << std::setw(2)
 			<< std::setfill('0') << (unsigned) value << "(" << std::dec
 			<< (unsigned) value << ")" << std::endl;
 	//now switch on the basic instruction and execute it with the provided address/value
@@ -418,56 +435,56 @@ int mos6502::exec(Instruction* op, uint16_t address) {
 	//Branches
 	case BCC:
 		if(!(P & fCval)) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BCS:
 		if(P & fCval) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BEQ:
 		if(P & fZval) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BMI:
 		if(P & fNval) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BNE:
 		if(!(P & fZval)) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BPL:
 		if(!(P & fNval)) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BVC:
 		if(!(P & fVval)) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
 		break;
 	case BVS:
 		if(P & fVval) {
-			PC += value;
+			PC += uint2int(value);
 			skipExtra++;
 			if(xPage) skipExtra++;
 		}
