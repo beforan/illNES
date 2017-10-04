@@ -1,10 +1,14 @@
 # illNES
 
-illNES is an ill-conceived NES emulator project, that came to life due to a temporary obsession with emulating a MOS6502 (what can I say, I grew up with a C64 and got nostalgic), and a desire to get more comfortable with C++, bitwise operations and Eclipse.
+illNES is an ill-conceived NES emulator project, that came to life due to a temporary obsession with emulating a MOS6502 (what can I say, I grew up with a C64 and got nostalgic).
+
+It began due to a desire to get more comfortable with C++, bitwise operations and Eclipse.
+
+However, the c++ version is abandoned, and the incomplete MOS6502 is retained here in this orphaned branch for historical reasons.
 
 ## Status
 
-illNES is woefully incomplete, and will probably mostly be worked on sporadically, but is likely something I will keep coming back to.
+illNES's original C++ version is woefully incomplete, and now abandoned in favour of the C# version.
 
 Current status:
 
@@ -15,12 +19,11 @@ Current status:
 * No NES PPU (display)
 * No Input
 * No NES APU (sound)
-* No game compatibility yet!
-
+* No game compatibility!
 
 ## How do I get set up?
 
-Please see the below section about contribution. If you want to use code from this repository in a project, clone the repo and take the bits you need, or fork it if you like. The code is under the MIT License, so please retain the license text and copyright if you use anything!
+Please see the below section about contribution. If you want to use code from this repository in a project, clone the repo and take the bits you need, or fork it if you like. The code is under the ISC License, so please retain the license text and copyright if you use anything!
 
 That said, if you just want to get what's here and compile and run stuff, here are some notes:
 
@@ -64,14 +67,16 @@ cpu-test's `main()` requires one parameter, and accepts an optional second:
 * First parameter is for an assembled binary to run on the CPU.
 * Second parameter is the path to a plain text log file.
 
-The assembled binary must be valid 6502 assembly, and only use opcodes supported by the emulated CPU. Look in the **Assembled Binaries** folder for some of the tests I've used in development. You can also find the 6502 aseembly source for these in **Assembly Source Files**.
+The assembled binary must be valid 6502 assembly, and only use opcodes supported by the emulated CPU.
+
+Look in the `assembly` branch for some of the tests I've used in development.
+
+The branch contains some assembly source in `src` and also some binaries of those source files in `bin`.
 
 The log file doesn't need to exist already. If no log file path is supplied, the program will use stdout instead. This isn't unique to cpu-test.cpp - it's thanks to the Log module.
 
 ## Contribution
 
-This is really a private project for me as an educational experience at this time, so contributions to this repository are not accepted.
+This C++ version is now abandoned, so no contribution is accepted to this branch.
 
-Once (if?) it's more complete and functional, I might consider opening it up as a proper collaborative open source emulator, but that's not in line with my current aims.
-
-However, the code is available under the MIT License, so while I'm not accepting contributions to the repository, feel free to take anything here and build it to try and run things, or use it in your own projects or as the basis for your own 6502 computer emulator or anything else you might like!
+However, the code is available under the ISC License, so feel free to take anything here and build it to try and run things, or use it in your own projects or as the basis for your own 6502 computer emulator or anything else you might like!
