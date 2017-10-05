@@ -1,4 +1,5 @@
 using System;
+using System.Net.Sockets;
 using Xunit;
 
 namespace illNES.CPU.Test
@@ -32,11 +33,25 @@ namespace illNES.CPU.Test
         public void ConstructorInitialises64KRam()
         {
             var ram = new byte[0x10000];
-            var mem = new BaseMemoryInterface();
+            var mem = new BaseMemoryInterface(ram);
 
             mem.Read(0xffff);
 
             //No formal assertion required, since the test will throw if there's an issue.
+        }
+
+        [Fact]
+        public void WriteSetsValueAtAddress()
+        {
+            var ram = new byte[0x10000];
+            var mem = new BaseMemoryInterface(ram);
+
+            const ushort address = 0;
+            const byte val = 5;
+
+            mem.Write(address, val);
+
+            Assert.Equal(val, ram[address]);
         }
 
         //[Fact]
