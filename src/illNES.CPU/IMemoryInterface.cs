@@ -13,12 +13,13 @@ namespace illNES.CPU {
         byte Read(ushort address);
 
         /// <summary>
-        /// Read a 16 bit value comprised of the byte at the specified 16-bit address,
-        /// and the next consecutive address.
-        /// Note that memory wraps within the 16-bit address range,
-        /// so the word read from `0xffff` will be the byte from `0xffff` and the byte from `0x0000`.
+        /// Read a 16 bit value from two consecutive memory addresses.
+        /// `address` contains LSB, `address+1` contains MSB.
+        /// The bytes are put back together little endian, as follows:
         /// 
-        /// MOS6502 is little endian.
+        /// address (LSB): 0xee
+        /// address + 1 (MSB): 0xff
+        /// result (MSBLSB): 0xffee
         /// </summary>
         /// <param name="address">The memory address to start reading at</param>
         /// <returns>
