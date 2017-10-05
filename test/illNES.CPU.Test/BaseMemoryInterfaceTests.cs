@@ -46,7 +46,7 @@ namespace illNES.CPU.Test
             var ram = new byte[0x10000];
             var mem = new BaseMemoryInterface(ram);
 
-            const ushort address = 0;
+            const ushort address = 17;
             const byte val = 5;
 
             mem.Write(address, val);
@@ -54,36 +54,54 @@ namespace illNES.CPU.Test
             Assert.Equal(val, ram[address]);
         }
 
-        //[Fact]
-        //public void ReadReturnsWhatWasWritten()
-        //{
-        //    var mem = new BaseMemoryInterface();
+        [Fact]
+        public void ReadGetsByteValueAtAddress()
+        {
+            var ram = new byte[0x10000];
+            var mem = new BaseMemoryInterface(ram);
 
-        //    const byte val = 5;
-        //    const ushort address = 0;
+            const ushort address = 73;
+            const byte val = 32;
 
-        //    mem.Write(address, val);
+            ram[address] = val;
 
-        //    Assert.Equal(val, mem.Read(address));
-        //}
+            Assert.Equal(val, mem.Read(address));
+        }
 
-        //[Fact]
-        //public void ReadWordReturnsWhatWasWrittenCorrectly()
-        //{
-        //    var mem = new BaseMemoryInterface();
+        [Fact]
+        public void ReadWordGetsCorrectWordValueFromConsecutiveAddresses()
+        {
+            var ram = new byte[0x10000];
+            var mem = new BaseMemoryInterface(ram);
 
-        //    const byte msb = 0xff;
-        //    const byte lsb = 0xee;
+            const ushort address = 210;
+            const byte msb = 0xff;
+            const byte lsb = 0xee;
+            const ushort word = 0xffee;
 
-        //    const ushort word = 0xffee;
+            //this is the correct behaviour for 6502's program counter
+            ram[address] = lsb;
+            ram[address+1] = msb;
 
-        //    const ushort address = 0;
+            Assert.Equal(word, mem.ReadWord(address));
+        }
 
-        //    //Write both bytes to consecutive addresses
-        //    mem.Write(address, lsb);
-        //    mem.Write(address+1, msb);
+        [Fact]
+        public void ReadWordAt0xffffWrapsAround()
+        {
+            var ram = new byte[0x10000];
+            var mem = new BaseMemoryInterface(ram);
 
-        //    Assert.Equal(word, mem.ReadWord(address));
-        //}
+            const ushort address = 0xffff;
+            const byte msb = 0xff;
+            const byte lsb = 0xee;
+            const ushort word = 0xffee;
+
+            //this is the correct behaviour for 6502's program counter
+            ram[address] = lsb;
+            ram[(address+1) & 0xffff] = msb; //We manually wrap the "address+1" for the setup write
+
+            Assert.Equal(word, mem.ReadWord(address));
+        }
     }
 }
