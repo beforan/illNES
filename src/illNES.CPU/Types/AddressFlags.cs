@@ -1,4 +1,6 @@
 ﻿using System;
+
+namespace illNES.CPU.Types
 {
     /// <summary>
     /// Flags for operations to take for addressing modes
