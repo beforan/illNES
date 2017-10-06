@@ -5,7 +5,7 @@ namespace illNES.CPU
     public partial class Mos6502 : IMos6502
     {
         private readonly IMemoryInterface _m;
-        private static readonly InstructionSet Instructions = new InstructionSet();
+        private static readonly InstructionSet Operations = new InstructionSet();
 
         /// <inheritdoc />
         public byte A { get; private set; }
@@ -43,11 +43,11 @@ namespace illNES.CPU
             //Only actually tick if we are not skipping cycles
             if (_skipCycles == 0)
             {
-                var op = Instructions[_m.Read(PC)]; //set the op code value from the program counter's memory address
+                var op = Operations[_m.Read(PC)]; //set the op code value from the program counter's memory address
 
                 // check for interrupts and implement them as a BRK op
                 if (_reset || _nmi || _irq && (P & PFlags.I) == 0) //IRQ requires the interrupt flag to be off, the others don't
-                    op = Instructions[0];
+                    op = Operations[0];
 
                 // Handle addressing mode
                 var address = GetAddress(op.Mode);
@@ -66,18 +66,18 @@ namespace illNES.CPU
         }
 
         /// <summary>
-        /// Execute an Instruction
+        /// Execute an instruction
         /// </summary>
-        /// <param name="op">The Instruction</param>
+        /// <param name="op">The Operation containing the instruction details</param>
         /// <param name="address">The address</param>
         /// <returns>The number of cycles the Operation "took"</returns>
-        private int Exec(Instruction op, ushort address)
+        private int Exec(Operation op, ushort address)
         {
             throw new System.NotImplementedException();
         }
 
         /// <summary>
-        /// Gets the actual memory address an Op will operate on, based on the instruction's addressing mode.
+        /// Gets the actual memory address for an Operation, based on its addressing mode.
         /// </summary>
         /// <param name="mode">The addressing mode</param>
         /// <returns>The address</returns>

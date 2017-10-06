@@ -1,10 +1,6 @@
 ﻿namespace illNES.CPU.Types
 {
-    /// <summary>
-    /// this is reaaaally just to make life slightly nicer
-    /// for us in the current exec() implementation
-    /// </summary>
-    internal enum Ops
+    internal enum Instructions
     { 
         ADC, AND, ASL, BCC, BCS, BEQ, BIT, BMI,
         BNE, BPL, BRK, BVC, BVS, CLC, CLD, CLI,
