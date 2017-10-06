@@ -6,9 +6,9 @@
     internal class Operation
     {
 
-        public Operation(Instructions execCode, AddressModes mode, ushort length, int cycles)
+        public Operation(Instructions instruction, AddressModes mode, ushort length, int cycles)
         {
-            Instruction = execCode;
+            Instruction = instruction;
             Mode = mode;
             Length = length;
             Cycles = cycles;
