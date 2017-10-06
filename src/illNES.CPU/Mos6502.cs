@@ -50,7 +50,7 @@ namespace illNES.CPU
                     op = Instructions[0];
 
                 // Handle addressing mode
-                var address = GetAddress(op.Mode); //TODO use the Instruction's mode
+                var address = GetAddress(op.Mode);
 
                 PC += op.Length; //increment PC by the expected amount, as GetAddress() has read the op params
 
