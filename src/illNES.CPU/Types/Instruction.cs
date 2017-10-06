@@ -6,7 +6,7 @@
     internal class Instruction
     {
 
-        public Instruction(Ops execCode, AddressModes mode, int length, int cycles)
+        public Instruction(Ops execCode, AddressModes mode, ushort length, int cycles)
         {
             ExecCode = execCode;
             Mode = mode;
