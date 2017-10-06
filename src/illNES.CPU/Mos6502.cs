@@ -73,7 +73,10 @@ namespace illNES.CPU
         /// <returns>The number of cycles the Operation "took"</returns>
         private int Exec(Operation op, ushort address)
         {
-            throw new System.NotImplementedException();
+            //TODO implement more ops
+
+            //For now we ignore op, and just NOP!
+            return Operations[0xea].Cycles;
         }
 
         /// <summary>
