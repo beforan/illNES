@@ -1,13 +1,11 @@
-﻿using System.Resources;
-using System.Threading;
-using System.Xml;
-using illNES.CPU.Types;
+﻿using illNES.CPU.Types;
 
 namespace illNES.CPU
 {
-    public class Mos6502 : IMos6502
+    public partial class Mos6502 : IMos6502
     {
         private readonly IMemoryInterface _m;
+        private static readonly InstructionSet Instructions = new InstructionSet();
 
         /// <inheritdoc />
         public byte A { get; private set; }
@@ -37,8 +35,6 @@ namespace illNES.CPU
         public Mos6502(IMemoryInterface m)
         {
             _m = m;
-
-            //TODO In the C++ ctor we build an instruction set lookup table here...
         }
 
         /// <inheritdoc />
@@ -47,18 +43,16 @@ namespace illNES.CPU
             //Only actually tick if we are not skipping cycles
             if (_skipCycles == 0)
             {
-                var op = _m.Read(PC); //set the op code value from the program counter's memory address
-                //TODO turn the op into an Instruction as per the C++
+                var op = Instructions[_m.Read(PC)]; //set the op code value from the program counter's memory address
 
                 // check for interrupts and implement them as a BRK op
                 if (_reset || _nmi || _irq && (P & PFlags.I) == 0) //IRQ requires the interrupt flag to be off, the others don't
-                    op = (byte)Ops.BRK; //TODO Replace the op code with an Instruction as per the C++
+                    op = Instructions[0];
 
-                //Handle addressing mode
-                var address = GetAddress(AddressModes.Immediate); //TODO use the Instruction's mode
+                // Handle addressing mode
+                var address = GetAddress(op.Mode); //TODO use the Instruction's mode
 
-                PC += 0; //increment PC by the expected amount, as GetAddress() has read the op params
-                //TODO use the Instruction's Length
+                PC += op.Length; //increment PC by the expected amount, as GetAddress() has read the op params
 
                 _skipCycles = Exec(op, address);
             }
@@ -77,7 +71,7 @@ namespace illNES.CPU
         /// <param name="op">The Instruction</param>
         /// <param name="address">The address</param>
         /// <returns>The number of cycles the Operation "took"</returns>
-        private int Exec(byte op, ushort address)
+        private int Exec(Instruction op, ushort address)
         {
             throw new System.NotImplementedException();
         }

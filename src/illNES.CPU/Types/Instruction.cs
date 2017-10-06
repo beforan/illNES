@@ -14,12 +14,6 @@
             Cycles = cycles;
         }
 
-        //TODO not sure we need this as it's the key in the instruction set anyway?
-        ///// <summary>
-        ///// The instruction's OpCode value
-        ///// </summary>
-        //public byte OpCode { get; set; }
-
         /// <summary>
         /// The friendly Mnemonic for this instruction.
         /// This is not unique as some Mnemonics are
@@ -42,7 +36,7 @@
         /// <summary>
         /// The byte length of this instruction in memory
         /// </summary>
-        public int Length { get; private set; }
+        public ushort Length { get; private set; }
 
         /// <summary>
         /// The default number of CPU cycles this instruction expends.

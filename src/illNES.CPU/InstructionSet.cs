@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using illNES.CPU.Types;
 
 namespace illNES.CPU
