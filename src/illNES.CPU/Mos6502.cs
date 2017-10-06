@@ -83,7 +83,11 @@ namespace illNES.CPU
         /// <returns>The address</returns>
         private ushort GetAddress(AddressModes mode)
         {
-            throw new System.NotImplementedException();
+            //TODO implement all addressing modes
+
+            //For now, we ignore `mode` and address using "Implied mode" only
+            //which y'know, does nothing.
+            return 0;
         }
 
         /// <inheritdoc />
