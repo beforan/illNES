@@ -10,6 +10,8 @@ Welcome to illNES's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   cyborg/6502
+
 
 
 Indices and tables
@@ -17,4 +19,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
