@@ -4,6 +4,7 @@ Instruction set Lookup Table
 
 ===== ======
 I-Len T-Cnt
+----- ------
 Mnemonic
 ------------
 Address Mode
@@ -20,5 +21,25 @@ Address Mode
 
 The opcode for any instruction may be composed by reading the row and column it is in:
 
-- "ASL" in "Absolute" addressing mode is in row "1-", column "-E"
-- Therefore it's opcode (hexadecimal representation) is "1E" (or $1E or 0x1E)
+- ``ASL`` in **Absolute** addressing mode is in row ``1-``, column ``-E``
+- Therefore it's opcode (hexadecimal representation) is ``1E`` (or ``$1E`` or ``0x1E``)
+
+Some instructions (or more specifically :doc:`Addressing Modes <addr_mode>`) require either one or two bytes of data as a parameter.
+
+Under these circumstances, this data immediately follows the instruction itself.
+
+============= ===============
+Mnemonic Code Assembled Code
+============= ===============
+``PLA``       ``$68``
+``BEQ $03``   ``$F0 $9F``
+``JMP $A5B6`` ``$4C $B6 $A5``
+============= ===============
+
+.. note::
+
+    Here the author intended to provide a table of the complete instruction set, with each opcode's details specified as described above.
+
+    In practice, the table was still incomplete even when the site went offline in 2016.
+
+    These docs refer you to `Wikipedia's equivalent table <https://en.wikipedia.org/wiki/MOS_Technology_6502#Assembly_language_instructions>`_ (albeit with less detail), and the rest of this documentation.
