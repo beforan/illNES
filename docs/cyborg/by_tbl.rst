@@ -36,10 +36,17 @@ Mnemonic Code Assembled Code
 ``JMP $A5B6`` ``$4C $B6 $A5``
 ============= ===============
 
+Key to Addressing modes:
+------------------------
+
+============ =============== ============= =============
+**Implied**  **Accumulator** **Immediate** **Zero Page**
+\-           A               #             0
+**Absolute** **Indirect**    **X-indexed** **Y-indexed**
+/            >               X             Y
+============ =============== ============= =============
+
+.. include:: by_tbl-table.rst
+
 .. note::
-
-    Here the author intended to provide a table of the complete instruction set, with each opcode's details specified as described above.
-
-    In practice, the table was still incomplete even when the site went offline in 2016.
-
-    These docs refer you to `Wikipedia's equivalent table <https://en.wikipedia.org/wiki/MOS_Technology_6502#Assembly_language_instructions>`_ (albeit with less detail), and the rest of this documentation.
+    - Blank opcodes, e.g., ``F2``, and all opcodes whose low nibbles are ``3``, ``7``, ``B`` and ``F`` are undefined in the 6502 instruction set. 
