@@ -1,17 +1,20 @@
-﻿namespace illNES.CPU.Types
+﻿using System;
+
+namespace illNES.CPU.Types
 {
     /// <summary>
     /// Data structure for a single CPU operation
     /// </summary>
     internal class Operation
     {
-
-        public Operation(Instructions instruction, AddressModes mode, ushort length, int cycles)
+        public Operation(Instructions instruction, AddressModes mode, ushort length, int cycles,
+            Func<AddressModes, ushort, byte, int> exec)
         {
             Instruction = instruction;
             Mode = mode;
             Length = length;
             Cycles = cycles;
+            Exec = exec;
         }
 
         /// <summary>
@@ -44,6 +47,11 @@
         /// The default number of CPU cycles this Operation expends.
         /// Extra cycles may be conditionally expended.
         /// </summary>
-        public int Cycles{ get; private set; }
+        public int Cycles { get; private set; }
+
+        /// <summary>
+        /// The code to execute
+        /// </summary>
+        public Func<AddressModes, ushort, byte, int> Exec { get; private set; }
     }
 }
