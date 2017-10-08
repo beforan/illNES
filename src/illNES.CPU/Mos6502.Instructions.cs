@@ -21,9 +21,6 @@ namespace illNES.CPU
          * they already have access to the CPU's state (registers, ram etc)
          */
 
-        //NOP
-        private void Nop(AddressModes _, ushort __, byte ___) { }
-
         //BRK
         private void Brk(AddressModes _, ushort address, byte ___)
         {
@@ -56,6 +53,16 @@ namespace illNES.CPU
             PC = _m.ReadWord(address);
         }
 
+        //CLEAR flags
+        private void Clc(AddressModes _, ushort __, byte ___)
+            => P |= ~PFlags.C;
+        private void Cld(AddressModes _, ushort __, byte ___)
+            => P |= ~PFlags.D;
+        private void Cli(AddressModes _, ushort __, byte ___)
+            => P |= ~PFlags.I;
+        private void Clv(AddressModes _, ushort __, byte ___)
+            => P |= ~PFlags.V;
+
         //SET flags
         private void Sec(AddressModes _, ushort __, byte ___)
             => P |= PFlags.C;
@@ -63,5 +70,8 @@ namespace illNES.CPU
             => P |= PFlags.D;
         private void Sei(AddressModes _, ushort __, byte ___)
             => P |= PFlags.I;
+
+        //NOP
+        private void Nop(AddressModes _, ushort __, byte ___) { }
     }
 }

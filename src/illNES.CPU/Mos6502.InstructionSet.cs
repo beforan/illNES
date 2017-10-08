@@ -24,11 +24,16 @@ namespace illNES.CPU
                 //BRK
                 [0x00] = new Operation(Instructions.BRK, AddressModes.Implied, 1, 7, Brk),
 
+                //CLEAR flags
+                [0x18] = new Operation(Instructions.CLC, AddressModes.Implied, 1, 2, Clc),
+                [0xD8] = new Operation(Instructions.CLD, AddressModes.Implied, 1, 2, Cld),
+                [0x58] = new Operation(Instructions.CLI, AddressModes.Implied, 1, 2, Cli),
+                [0xB8] = new Operation(Instructions.CLV, AddressModes.Implied, 1, 2, Clv),
+
                 //SET flags
                 [0x38] = new Operation(Instructions.SEC, AddressModes.Implied, 1, 2, Sec),
                 [0xF8] = new Operation(Instructions.SED, AddressModes.Implied, 1, 2, Sed),
-                [0x78] = new Operation(Instructions.SEI, AddressModes.Implied, 1, 2, Sei)
-            };
+                [0x78] = new Operation(Instructions.SEI, AddressModes.Implied, 1, 2, Sei),            };
 
             //any we didn't specify above should be NOP
             for (int i = 0; i < set.Count; i++)
