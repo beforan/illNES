@@ -52,7 +52,9 @@ namespace illNES.CPU.Test
         [Fact]
         public void _0x78SetsInterruptFlag()
         {
-            _cpu.Tick(); //TODO test this properly; the I flag is set at startup :(
+            _cpu.P |= ~PFlags.I; //Clear the flag before we act
+
+            _cpu.Tick(); //Tick to act
 
             Assert.True(_cpu.P.HasFlag(PFlags.I));
         }

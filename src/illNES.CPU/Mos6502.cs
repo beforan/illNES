@@ -10,22 +10,22 @@ namespace illNES.CPU
         private IList<Operation> _ops;
 
         /// <inheritdoc />
-        public byte A { get; private set; }
+        public byte A { get; internal set; }
 
         /// <inheritdoc />
-        public byte X { get; private set; }
+        public byte X { get; internal set; }
 
         /// <inheritdoc />
-        public byte Y { get; private set; }
+        public byte Y { get; internal set; }
 
         /// <inheritdoc />
-        public byte S { get; private set; } = 0xff; //Init the stack pointer to 255, since it works backwards.
+        public byte S { get; internal set; } = 0xff; //Init the stack pointer to 255, since it works backwards.
 
         /// <inheritdoc />
-        public ushort PC { get; private set; } = 0xfffc; // Initialise to the reset vector
+        public ushort PC { get; internal set; } = 0xfffc; // Initialise to the reset vector
 
         /// <inheritdoc />
-        public PFlags P { get; private set; } = PFlags.R | PFlags.I; //the Always 1 flag is set, and we set Interrupt disable at power on
+        public PFlags P { get; internal set; } = PFlags.R | PFlags.I; //the Always 1 flag is set, and we set Interrupt disable at power on
 
         //Internal state bits
         private bool _reset = true; //start in reset, means we can execute bootstrap as a reset ;)
