@@ -14,21 +14,23 @@ namespace illNES.CPU
          * 
          * Any parameter not used by a method will be underscore named.
          * 
-         * All instruction methods return the number of EXTRA cycles to skip
-         * above and beyond those in the Operation metadata
+         * Instructions needing to skip extra cycles due to page crossing
+         * or any other reason may simply increment _skipCycles directly.
          * 
          * Because all instructions are methods on Mos6502
          * they already have access to the CPU's state (registers, ram etc)
          */
 
-        private int Nop(AddressModes _, ushort __, byte ___) => 0;
+        //NOP
+        private void Nop(AddressModes _, ushort __, byte ___) { }
 
-        private int Brk(AddressModes _, ushort address, byte __)
+        //BRK
+        private void Brk(AddressModes _, ushort address, byte ___)
         {
             //here we have to fiddle stuff for interrupts
             if (!_reset && !_nmi && !_irq) //software BRK instruction
                 PC++; //increment PC again, cos BRK is, well, BRKen.
-            
+
             //stick current state on the stack (unless resetting) and decrement S (EVEN if resetting)
             if (!_reset)
                 _m.Write((ushort)(0x1 << 8 | S), (byte)(PC >> 8)); //stick high byte of PC on the stack
@@ -52,8 +54,14 @@ namespace illNES.CPU
                 address = 0xfffa;
 
             PC = _m.ReadWord(address);
-
-            return 0;
         }
+
+        //SET flags
+        private void Sec(AddressModes _, ushort __, byte ___)
+            => P |= PFlags.C;
+        private void Sed(AddressModes _, ushort __, byte ___)
+            => P |= PFlags.D;
+        private void Sei(AddressModes _, ushort __, byte ___)
+            => P |= PFlags.I;
     }
 }
