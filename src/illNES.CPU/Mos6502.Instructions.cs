@@ -71,6 +71,20 @@ namespace illNES.CPU
         private void Sei(AddressModes _, ushort __, byte ___)
             => P |= PFlags.I;
 
+        //Transfer Registers
+        private void Tax(AddressModes _, ushort __, byte ___)
+        { X = A; CheckFlagsZN(X); }
+        private void Tay(AddressModes _, ushort __, byte ___)
+        { Y = A; CheckFlagsZN(Y); }
+        private void Tsx(AddressModes _, ushort __, byte ___)
+        { X = S; CheckFlagsZN(X); }
+        private void Txa(AddressModes _, ushort __, byte ___)
+        { A = X; CheckFlagsZN(A); }
+        private void Txs(AddressModes _, ushort __, byte ___)
+            => S = X;
+        private void Tya(AddressModes _, ushort __, byte ___)
+        { A = Y; CheckFlagsZN(A); }
+
         //NOP
         private void Nop(AddressModes _, ushort __, byte ___) { }
     }
