@@ -5,8 +5,11 @@ namespace illNES.CPU
 {
     internal class InstructionSet
     {
-        //Initialised with the ops we care about
-        private static readonly IList<Operation> Operations = new List<Operation>
+        //Fixed size list instead of array means
+        //we can configure only the values we care about
+        //in a literal initialiser
+        private static readonly IList<Operation> Operations =
+            new List<Operation>(new Operation[0xff])
         {
             //TODO pop these as we implement them
             //ADC - examples porting from C++
