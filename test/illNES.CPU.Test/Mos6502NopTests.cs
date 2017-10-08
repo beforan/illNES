@@ -31,7 +31,7 @@ namespace illNES.CPU.Test
         {
             var p = _cpu.P;
             var s = _cpu.S;
-            _cpu.Tick(); //This should get our NOP, and execute it
+            _cpu.Tick();
 
             //Registers should still be at initial values
             Assert.All(
@@ -45,7 +45,7 @@ namespace illNES.CPU.Test
         [Fact]
         public void _0xeaAdvancesProgramCounterBy1()
         {
-            _cpu.Tick(); //This should get our NOP, and execute it
+            _cpu.Tick();
 
             Assert.Equal(0x8001, _cpu.PC); //Program Counter has advanced by 1 only
         }
