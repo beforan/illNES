@@ -86,7 +86,6 @@ namespace illNES.CPU
         /// <returns>The address</returns>
         private ushort GetAddress(AddressModes mode)
         {
-            //TODO implement all addressing modes
             ushort address = 0;
 
             //set the offset value to X or Y reg ahead of time, even if we don't need it
