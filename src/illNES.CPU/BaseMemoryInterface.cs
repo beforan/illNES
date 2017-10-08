@@ -59,7 +59,9 @@ namespace illNES.CPU
             => AccessMemory(address);
 
         public ushort ReadWord(ushort address)
-            => (ushort)(AccessMemory((ushort)(address + 1)) << 8 | AccessMemory(address));
+            => (ushort)(
+            AccessMemory((ushort)((address + 1) & ushort.MaxValue)) << 8
+            | AccessMemory(address));
 
         public void Write(ushort address, byte value)
             => AccessMemory(address, value);
