@@ -5,18 +5,18 @@ using Xunit;
 
 namespace illNES.CPU.Test
 {
-    public class Mos6502TayTests
+    public class Mos6502TsxTests
     {
         private Mock<IMemoryInterface> _mMock;
         private IMemoryInterface _m;
         private Mos6502 _cpu;
 
-        public Mos6502TayTests()
+        public Mos6502TsxTests()
         {
             _mMock = new Mock<IMemoryInterface>();
             _mMock.Setup(mem => mem.Read(0xfffc)).Returns(0x0);
             _mMock.Setup(mem => mem.ReadWord(0xfffc)).Returns(0x8000); //PC points to ROM start at 0x8000
-            _mMock.Setup(mem => mem.Read(0x8000)).Returns(0xA8); //ROM start returns TAY
+            _mMock.Setup(mem => mem.Read(0x8000)).Returns(0xba); //ROM start returns TSX
             _m = _mMock.Object;
 
             _cpu = new Mos6502(_m);
@@ -27,21 +27,19 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0xa8LeavesNonTargetRegistersAlone()
+        public void _0xbaLeavesNonTargetRegistersAlone()
         {
-            _cpu.A = 5;
-
             var s = _cpu.S;
             _cpu.Tick();
 
-            Assert.Equal(5, _cpu.A);
-            Assert.Equal(0, _cpu.X);
+            Assert.Equal(0, _cpu.A);
+            Assert.Equal(0, _cpu.Y);
 
             Assert.Equal(s, _cpu.S);
         }
 
         [Fact]
-        public void _0xa8AdvancesProgramCounterBy1()
+        public void _0xbaAdvancesProgramCounterBy1()
         {
             _cpu.Tick();
 
@@ -49,21 +47,19 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0xa8TransfersAtoY()
+        public void _0xbaTransfersStoX()
         {
-            _cpu.Y = 0;
-            _cpu.A = 5;
+            _cpu.X = 0;
 
             _cpu.Tick();
 
-            Assert.Equal(_cpu.A, _cpu.Y);
+            Assert.Equal(_cpu.S, _cpu.X);
         }
 
         [Fact]
-        public void _0xa8ClearsZeroFlagForNonZeroY()
+        public void _0xbaClearsZeroFlagForNonZeroX()
         {
-            _cpu.Y = 0;
-            _cpu.A = 5;
+            _cpu.X = 0;
 
             _cpu.Tick();
 
@@ -71,10 +67,10 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0xa8ClearsNegativeFlagForNonSignedY()
+        public void _0xbaClearsNegativeFlagForNonSignedX()
         {
-            _cpu.Y = 0;
-            _cpu.A = 5;
+            _cpu.X = 0;
+            _cpu.S = 5;
 
             _cpu.Tick();
 
@@ -82,10 +78,10 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0xa8SetsZeroFlagForZeroY()
+        public void _0xbaSetsZeroFlagForZeroX()
         {
-            _cpu.Y = 5;
-            _cpu.A = 0;
+            _cpu.X = 5;
+            _cpu.S = 0;
 
             _cpu.Tick();
 
@@ -93,9 +89,9 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0xa8SetsNegativeFlagForSignedY()
+        public void _0xbaSetsNegativeFlagForSignedX()
         {
-            _cpu.Y = 0;
+            _cpu.X = 0;
             _cpu.A = 200;
 
             _cpu.Tick();
@@ -104,7 +100,7 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0xa8Takes2Cycles()
+        public void _0xbaTakes2Cycles()
         {
             Enumerable.Range(0, 2).ToList()
                 .ForEach(x => _cpu.Tick()); //Tick the expected number of times
