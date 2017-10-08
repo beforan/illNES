@@ -98,7 +98,7 @@ namespace illNES.CPU.Test
 
             //this is the correct behaviour for 6502's program counter
             ram[address] = lsb;
-            ram[(address+1) & 0xffff] = msb; //We manually wrap the "address+1" for the setup write
+            ram[(address+1) & ushort.MaxValue] = msb; //We manually wrap the "address+1" for the setup write
 
             Assert.Equal(word, mem.ReadWord(address));
         }

@@ -1,74 +1,124 @@
-﻿namespace illNES.CPU.Types
+﻿using System;
+
+namespace illNES.CPU.Types
 {
     /// <summary>
     /// Not only a useful enum of the 6502's addressing modes,
     /// the values are flags for operations used in the addressing,
     /// So the values describe how to address in that mode!
     /// </summary>
+    [Flags]
     internal enum AddressModes
     {
+        /// <summary>
+        /// A handy flag for no flags set ;)
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Set the target address to PC+1
+        /// </summary>
+        SetParamAddress = 1,
+
+        /// <summary>
+        /// Set address to the byte value at the current address
+        /// </summary>
+        ReadByte = 2,
+
+        /// <summary>
+        /// Set address to the word value at the current address
+        /// </summary>
+        ReadWord = 4,
+
+        /// <summary>
+        /// Check for a Page wrap, and record if we need to skip a cycle
+        /// </summary>
+        CheckWrap = 8,
+
+        /// <summary>
+        /// Offset the address by the X or Y register,
+        /// depending if the OffsetY Flag is set
+        /// </summary>
+        Offset = 16,
+
+        /// <summary>
+        /// Wrap the address inside an 8-bit range
+        /// </summary>
+        ByteWrapAddress = 32,
+
+        /// <summary>
+        /// Set address to the word value at the current address
+        /// (later in the order)
+        /// </summary>
+        ReadWordLate = 64,
+
+        /// <summary>
+        /// Set the Offset Register to Y instead of X
+        /// </summary>
+        OffsetY = 128,
+
         Absolute = 
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadWord,
+            SetParamAddress |
+            ReadWord,
         AbsoluteX =
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadWord |
-            AddressFlags.CheckWrap |
-            AddressFlags.Offset,
+            SetParamAddress |
+            ReadWord |
+            CheckWrap |
+            Offset,
         AbsoluteY =
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadWord |
-            AddressFlags.CheckWrap |
-            AddressFlags.Offset |
-            AddressFlags.OffsetY,
+            SetParamAddress |
+            ReadWord |
+            CheckWrap |
+            Offset |
+            OffsetY,
 
-        Immediate = AddressFlags.SetParamAddress,
+        Immediate = SetParamAddress,
 
-        Implied = AddressFlags.None,
+        Implied = None,
         /// <summary>
         /// This abuses the OffsetY Flag to differentiate it from Implied Mode
         /// </summary>
-        Accumulator = AddressFlags.OffsetY,
+        Accumulator = OffsetY,
 
         //IndirectY: 10011111 : 0x9F
         Indirect = 
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte |
-            AddressFlags.ReadWord,
+            SetParamAddress |
+            ReadByte |
+            ReadWord,
         IndirectX = 
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte |
-            AddressFlags.Offset |
-            AddressFlags.ByteWrapAddress |
-            AddressFlags.ReadWordLate,
+            SetParamAddress |
+            ReadByte |
+            Offset |
+            ByteWrapAddress |
+            ReadWordLate,
         IndirectY =
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte |
-            AddressFlags.ReadWord |
-            AddressFlags.CheckWrap |
-            AddressFlags.Offset |
-            AddressFlags.OffsetY,
+            SetParamAddress |
+            ReadByte |
+            ReadWord |
+            CheckWrap |
+            Offset |
+            OffsetY,
 
         ZeroPage = 
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte,
+            SetParamAddress |
+            ReadByte,
         ZeroPageX = 
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte |
-            AddressFlags.Offset |
-            AddressFlags.ByteWrapAddress,
+            SetParamAddress |
+            ReadByte |
+            Offset |
+            ByteWrapAddress,
         ZeroPageY =
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte |
-            AddressFlags.Offset |
-            AddressFlags.ByteWrapAddress |
-            AddressFlags.OffsetY,
+            SetParamAddress |
+            ReadByte |
+            Offset |
+            ByteWrapAddress |
+            OffsetY,
         /// <summary>
         /// This abuses the OffsetY Flag to differentiate it from ZeroPage Mode
         /// </summary>
         Relative =
-            AddressFlags.SetParamAddress |
-            AddressFlags.ReadByte |
-            AddressFlags.OffsetY
+            SetParamAddress |
+            ReadByte |
+            OffsetY
     }
 }

@@ -86,11 +86,35 @@ namespace illNES.CPU
         /// <returns>The address</returns>
         private ushort GetAddress(AddressModes mode)
         {
-            //TODO implement all addressing modes
+            ushort address = 0;
 
-            //For now, we ignore `mode` and address using "Implied mode" only
-            //which y'know, does nothing.
-            return 0;
+            //set the offset value to X or Y reg ahead of time, even if we don't need it
+            byte offset = mode.HasFlag(AddressModes.OffsetY) ? Y : X;
+
+            //conditionally execute addressing stages in order
+            if (mode.HasFlag(AddressModes.SetParamAddress))
+                address = (ushort)((PC + 1) & ushort.MaxValue);
+
+            if (mode.HasFlag(AddressModes.ReadByte))
+                address = _m.Read(address);
+
+            if (mode.HasFlag(AddressModes.ReadWord))
+                address = _m.ReadWord(address);
+
+            if (mode.HasFlag(AddressModes.CheckWrap))
+                if ((address + offset) > (address | byte.MaxValue))
+                    _xPage = true;
+
+            if (mode.HasFlag(AddressModes.Offset))
+                address = (ushort)((address + offset) & ushort.MaxValue);
+
+            if (mode.HasFlag(AddressModes.ByteWrapAddress))
+                address = (ushort)(address & byte.MaxValue);
+
+            if (mode.HasFlag(AddressModes.ReadWordLate))
+                address = _m.ReadWord(address);
+
+            return (ushort)(address & ushort.MaxValue); //safety wrap
         }
 
         /// <inheritdoc />
