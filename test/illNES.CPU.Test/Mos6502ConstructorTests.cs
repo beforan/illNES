@@ -14,10 +14,12 @@ namespace illNES.CPU.Test
 
             var cpu = new Mos6502(m.Object);
 
-            //Most of the registers should be 0
+            //Main registers should be 0
             Assert.All(
-                new List<byte> { cpu.A, cpu.X, cpu.Y, cpu.S },
+                new List<byte> { cpu.A, cpu.X, cpu.Y },
                 item => Assert.Equal(0, item));
+
+            Assert.Equal(0xff, cpu.S);
 
             Assert.Equal(0xfffc, cpu.PC);
 

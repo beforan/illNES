@@ -19,7 +19,7 @@ namespace illNES.CPU
         public byte Y { get; private set; }
 
         /// <inheritdoc />
-        public byte S { get; private set; }
+        public byte S { get; private set; } = 0xff; //Init the stack pointer to 255, since it works backwards.
 
         /// <inheritdoc />
         public ushort PC { get; private set; } = 0xfffc; // Initialise to the reset vector
@@ -51,7 +51,7 @@ namespace illNES.CPU
                 var op = _ops[_m.Read(PC)]; //get the op for the code stored at PC
 
                 // check for interrupts and implement them as a BRK op
-                if (_reset || _nmi || _irq && (P & PFlags.I) == 0) //IRQ requires the interrupt flag to be off, the others don't
+                if (_reset || _nmi || _irq && !P.HasFlag(PFlags.I)) //IRQ requires the interrupt flag to be off, the others don't
                     op = _ops[0];
 
                 // Handle addressing mode

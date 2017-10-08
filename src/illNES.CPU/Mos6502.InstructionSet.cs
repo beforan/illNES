@@ -20,6 +20,9 @@ namespace illNES.CPU
                 //[0x79] = new Operation(Instructions.ADC, AddressModes.AbsoluteY, 3, 4),
                 //[0x61] = new Operation(Instructions.ADC) {j, "ADC", ADC, IndX, 2, 6},
                 //[0x71] = new Operation(Instructions.ADC) {j, "ADC", ADC, IndY, 2, 5},
+                
+                //BRK
+                [0x00] = new Operation(Instructions.BRK, AddressModes.Implied, 1, 7, Brk)
             };
 
             //any we didn't specify above should be NOP
