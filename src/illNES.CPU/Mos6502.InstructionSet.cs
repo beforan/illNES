@@ -25,9 +25,9 @@ namespace illNES.CPU
                 [0x00] = new Operation(Instructions.BRK, AddressModes.Implied, 1, 7, Brk),
 
                 //SET flags
-                [0x38] = new Operation(Instructions.SEC, AddressModes.Implied, 1, 7, Sec),
-                [0xF8] = new Operation(Instructions.SED, AddressModes.Implied, 1, 7, Sed),
-                [0x78] = new Operation(Instructions.SEI, AddressModes.Implied, 1, 7, Sei)
+                [0x38] = new Operation(Instructions.SEC, AddressModes.Implied, 1, 2, Sec),
+                [0xF8] = new Operation(Instructions.SED, AddressModes.Implied, 1, 2, Sed),
+                [0x78] = new Operation(Instructions.SEI, AddressModes.Implied, 1, 2, Sei)
             };
 
             //any we didn't specify above should be NOP
