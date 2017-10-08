@@ -125,5 +125,18 @@ namespace illNES.CPU
         {
             throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// Checks a register's byte value for Zero or Negative,
+        /// and sets the flags if necessary.
+        /// These two flags are commonly checked together.
+        /// </summary>
+        /// <param name="value">the byte value to check</param>
+        public void CheckFlagsZN(byte value)
+        {
+            P &= ~PFlags.N & ~PFlags.Z; //clear both flags first
+            if (value == 0) P |= PFlags.Z; //Set Zero
+            if (value >= 128) P |= PFlags.N; //Set Negative
+        }
     }
 }
