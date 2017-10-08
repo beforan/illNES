@@ -5,29 +5,18 @@ using Xunit;
 
 namespace illNES.CPU.Test
 {
-    public class Mos6502PhpTests
+    public class Mos6502PlpTests
     {
         private Mock<IMemoryInterface> _mMock;
         private IMemoryInterface _m;
         private Mos6502 _cpu;
 
-        private int _pushedValue;
-        private int _pushedAddress;
-
-        public Mos6502PhpTests()
+        public Mos6502PlpTests()
         {
             _mMock = new Mock<IMemoryInterface>();
             _mMock.Setup(mem => mem.Read(0xfffc)).Returns(0x0); 
             _mMock.Setup(mem => mem.ReadWord(0xfffc)).Returns(0x8000); //PC points to ROM start at 0x8000
-            _mMock.Setup(mem => mem.Read(0x8000)).Returns(0x08); //ROM start returns PHA
-
-            //store values for the push so we can check
-            _mMock.Setup(mem => mem.Write(It.IsAny<ushort>(), It.IsAny<byte>()))
-                .Callback<ushort, byte>((a, v) =>
-                {
-                    _pushedValue = v;
-                    _pushedAddress = a;
-                });
+            _mMock.Setup(mem => mem.Read(0x8000)).Returns(0x28); //ROM start returns PLP
 
             _m = _mMock.Object;
 
@@ -36,52 +25,42 @@ namespace illNES.CPU.Test
             //get the CPU past the opening BRK reset.
             Enumerable.Range(0, 7).ToList()
                 .ForEach(x => _cpu.Tick()); //Tick the expected number of times
+
+            _cpu.S = 0xfe; //lineup the stack pointer to make life easier ;)
+            _mMock.Setup(mem => mem.Read(0x01ff)).Returns(7); //top of the stack returns a value we can check for
         }
 
         [Fact]
-        public void _0x08LeavesRegistersAlone()
+        public void _0x28LeavesRegistersAlone()
         {
-            var p = _cpu.P;
             _cpu.Tick();
 
             //Registers should still be at initial values
             Assert.All(
                 new List<byte> { _cpu.A, _cpu.X, _cpu.Y },
                 item => Assert.Equal(0, item));
-
-            Assert.Equal(p, _cpu.P);
         }
 
         [Fact]
-        public void _0x08DecrementsS()
+        public void _0x28IncrementsS()
         {
             var s = _cpu.S;
 
             _cpu.Tick();
 
-            Assert.Equal(s - 1, _cpu.S);
+            Assert.Equal(s + 1, _cpu.S);
         }
 
         [Fact]
-        public void _0x08PushesP()
+        public void _0x28PullsPFromStackMemory()
         {
             _cpu.Tick();
 
-            Assert.Equal((byte)_cpu.P, _pushedValue);
+            Assert.Equal(7, (byte)_cpu.P);
         }
 
         [Fact]
-        public void _0x08PushesToStackMemory()
-        {
-            var s = _cpu.S;
-
-            _cpu.Tick();
-
-            Assert.Equal(0x1 << 8 | s, _pushedAddress);
-        }
-
-        [Fact]
-        public void _0x08AdvancesProgramCounterBy1()
+        public void _0x28AdvancesProgramCounterBy1()
         {
             _cpu.Tick();
 
@@ -89,9 +68,9 @@ namespace illNES.CPU.Test
         }
 
         [Fact]
-        public void _0x08Takes3Cycles()
+        public void _0x28Takes3Cycles()
         {
-            Enumerable.Range(0, 3).ToList()
+            Enumerable.Range(0, 4).ToList()
                 .ForEach(x => _cpu.Tick()); //Tick the expected number of times
 
             Assert.Equal(0x8001, _cpu.PC); //Program Counter has advanced by this op's length only
