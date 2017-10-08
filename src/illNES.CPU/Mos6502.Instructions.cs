@@ -63,6 +63,16 @@ namespace illNES.CPU
         private void Clv(AddressModes _, ushort __, byte ___)
             => P &= ~PFlags.V;
 
+        //Stack Ops (Push/Pull)
+        private void Pha(AddressModes _, ushort __, byte ___)
+            => _m.Write((ushort)(0x1 << 8 | S--), A);
+        private void Php(AddressModes _, ushort __, byte ___)
+            => _m.Write((ushort)(0x1 << 8 | S--), (byte)P);
+        private void Pla(AddressModes _, ushort __, byte ___)
+        { A = _m.Read((ushort)(0x1 << 8 | ++S)); CheckFlagsZN(A); }
+        private void Plp(AddressModes _, ushort __, byte ___)
+            => P = (PFlags)_m.Read((ushort)(0x1 << 8 | ++S));
+
         //SET flags
         private void Sec(AddressModes _, ushort __, byte ___)
             => P |= PFlags.C;
