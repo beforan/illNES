@@ -8,7 +8,7 @@ namespace illNES.CPU.Types
     internal class Operation
     {
         public Operation(Instructions instruction, AddressModes mode, ushort length, int cycles,
-            Func<AddressModes, ushort, byte, int> exec)
+            Action<AddressModes, ushort, byte> exec)
         {
             Instruction = instruction;
             Mode = mode;
@@ -52,6 +52,6 @@ namespace illNES.CPU.Types
         /// <summary>
         /// The code to execute
         /// </summary>
-        public Func<AddressModes, ushort, byte, int> Exec { get; private set; }
+        public Action<AddressModes, ushort, byte> Exec { get; private set; }
     }
 }

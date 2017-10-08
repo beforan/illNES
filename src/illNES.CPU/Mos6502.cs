@@ -59,7 +59,7 @@ namespace illNES.CPU
 
                 PC += op.Length; //increment PC by the expected amount, as GetAddress() has read the op params
 
-                _skipCycles = Exec(op, address);
+                _skipCycles += Exec(op, address);
             }
 
             //Decrement after the tick (if any) since Exec() will have set the appropriate skip value
@@ -76,8 +76,11 @@ namespace illNES.CPU
         /// <param name="op">The Operation containing the instruction details</param>
         /// <param name="address">The address</param>
         /// <returns>The number of cycles the Operation "took"</returns>
-        private int Exec(Operation op, ushort address) =>
-            op.Cycles + op.Exec(op.Mode, address, 0); //TODO calculate value
+        private int Exec(Operation op, ushort address)
+        {
+            op.Exec(op.Mode, address, 0); //TODO calculate value
+            return op.Cycles;
+        }
 
         /// <summary>
         /// Gets the actual memory address for an Operation, based on its addressing mode.
