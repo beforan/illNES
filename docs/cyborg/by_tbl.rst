@@ -46,7 +46,7 @@ Key to Addressing modes:
 /            >               X             Y
 ============ =============== ============= =============
 
-.. include:: by_tbl-table.rst
-
 .. note::
-    - Blank opcodes, e.g., ``F2``, and all opcodes whose low nibbles are ``3``, ``7``, ``B`` and ``F`` are undefined in the 6502 instruction set. 
+    The Cyborg Systems docs featured an incomplete table, so this is currently ommitted from these docs until a nice way to fit them into readthedocs is figured out.
+
+    The `wikipedia table <https://en.wikipedia.org/wiki/MOS_Technology_6502#Assembly_language_instructions>`_ can be used in the meantime.
