@@ -53,7 +53,8 @@ namespace illNES.CPU.Test
         [Fact]
         public void _0x0SetsTheInterruptFlag()
         {
-            //TODO we need the I flag to be off first to test properly...
+            _cpu.P &= ~PFlags.I;
+
             _cpu.Tick();
 
             //Registers should still be at initial values

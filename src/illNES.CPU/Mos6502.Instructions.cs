@@ -55,13 +55,13 @@ namespace illNES.CPU
 
         //CLEAR flags
         private void Clc(AddressModes _, ushort __, byte ___)
-            => P |= ~PFlags.C;
+            => P &= ~PFlags.C;
         private void Cld(AddressModes _, ushort __, byte ___)
-            => P |= ~PFlags.D;
+            => P &= ~PFlags.D;
         private void Cli(AddressModes _, ushort __, byte ___)
-            => P |= ~PFlags.I;
+            => P &= ~PFlags.I;
         private void Clv(AddressModes _, ushort __, byte ___)
-            => P |= ~PFlags.V;
+            => P &= ~PFlags.V;
 
         //SET flags
         private void Sec(AddressModes _, ushort __, byte ___)
