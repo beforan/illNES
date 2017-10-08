@@ -19,8 +19,14 @@ namespace illNES.CPU
                 [0x58] = new Operation(Instructions.CLI, AddressModes.Implied, 1, 2, Cli),
                 [0xB8] = new Operation(Instructions.CLV, AddressModes.Implied, 1, 2, Clv),
 
+                //Stack ops
+                [0x48] = new Operation(Instructions.PHA, AddressModes.Implied, 1, 3, Pha),
+		        [0x08] = new Operation(Instructions.PHP, AddressModes.Implied, 1, 3, Php),
+		        [0x68] = new Operation(Instructions.PLA, AddressModes.Implied, 1, 4, Pla),
+		        [0x28] = new Operation(Instructions.PLP, AddressModes.Implied, 1, 4, Plp),
+
                 //SET flags
-                [0x38] = new Operation(Instructions.SEC, AddressModes.Implied, 1, 2, Sec),
+        [0x38] = new Operation(Instructions.SEC, AddressModes.Implied, 1, 2, Sec),
                 [0xF8] = new Operation(Instructions.SED, AddressModes.Implied, 1, 2, Sed),
                 [0x78] = new Operation(Instructions.SEI, AddressModes.Implied, 1, 2, Sei),
 
