@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/badge/licence-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Build Status](https://travis-ci.org/beforan/illNES.svg?branch=develop)](https://travis-ci.org/beforan/illNES)
 # illNES
 
