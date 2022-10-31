@@ -1,0 +1,96 @@
+# C++ Roadmap
+
+import Historical from "./_historical.md"
+
+<Historical />
+
+This is the historical illNES development roadmap from the original C++ implementation.
+
+- [ ] Test outstanding opcodes
+- [ ] Alternative display modules
+- [ ] NES Joypad I/O
+- [ ] Ensure Easy6502 Snake runs
+- [ ] Partial NES MemoryInterface
+- [ ] Config for input keybinding
+- [ ] Start loading actual Mapper 0 NES ROMs
+- [ ] NES PPU
+- [ ] Super Mario Bros
+- [ ] NES APU
+- Future stuff...
+
+## Outstanding Opcodes
+The following opcodes are implemented but not confirmed working (or, I believe, in the case of branches, confirmed **not** working):
+
+* **Accumulator** mode ops: `LSR`
+* **Indirect** mode ops: `JMP`
+    * Test 5 should execute correctly
+
+These should be all that is left before we have a complete MOS6502 implementation in C++ :)
+
+## Alternative Display modules
+### qndDisplay
+qndDisplay is just that; quick n' dirty. It was never intended to be a long term thing; rather a way to treat some memory as VRAM and draw coloured pixels, so we have some kind of verifiable output when testing the CPU.
+
+It's modelled against [Easy6502](http://skilldrick.github.io/easy6502/) so we can use that to verify the visual output matches (and therefore assume the CPU is functioning correctly).
+
+Long term, the NES PPU will want writing, and quite possibly sometime in the future, a C64 display module, or modules for any other 6502 driven computer's graphics hardware. I guess this is a separate issue though.
+
+### SDL
+qndDisplay is based on SDL currently.
+I'd like to first see it based on either [OpenGL](https://github.com/beforan/illNES/wiki/OpenGL-notes) directly
+or Ben's [Gridded Pixel Renderer](https://bitbucket.org/hallstein/griddedpixelrenderer)
+ as an interim (but more modern and homegrown) solution rather than relying on SDL (though SDL is proven...)
+
+## NES Joypad I/O
+Need to add basic input functionality, and this is the most sensible place to start.
+
+### input functions
+* D-pad (4-way U, D, L, R only)
+* A
+* B
+* Start
+* Select
+
+Nice and simple, and the d-pad alone will facilitate being able to play Snake.
+
+### Why straight to NES?
+Why not? it's very simple and we are building a NES emu first after all.
+Other input modules could be added to work with the CPU and MemoryInterfaces (e.g. C64) but NES first, so we may as well do it straight to the NES memory addresses etc.
+
+### How do we get the input?
+SDL first. Others maybe later?
+
+## Ensure Easy6502 Snake runs
+Should be a good test of Input, Display and CPU modules; does a known working 6502 assembly version of Snake work?
+
+## Partial NES MemoryInterface
+Rather than the straight 64k addressable BasicMemoryInterface, implement a NES one:
+
+* Map 2k RAM zone
+* Map I/O ? (Should be easy since the first I/O module will be NES joypad anyway)
+* Leave PPU/APU/PRG/CHR zones
+
+Wire up the NES I/O through this memory interface and re-test Snake? (qndDisplay should still work using the remaining (unimplemented) zones where PPU etc aren't yet)
+
+## Config for input keybinding
+Allow some means (probably config file rather than UI at this stage) to configure keybindings to the NES joypad I/O, and retest snake.
+
+## Start loading actual Mapper 0 NES ROMs
+Work on NESCart code, and start loading basic (Mapper 0 - Super Mario Bros?) ROMs into the Partial MemoryInterface (so implement PRG and CHR zones in the mapper)
+* Map ROM to 0x8000+ in MemoryInterface
+
+## NES PPU
+* Rewrite qndDisplay as an SDL based (initially) NES PPU
+* Implement PPU zone in MemoryInterface
+
+[Useful PPU notes](http://badderhacksnet.ipage.com/badderhacks/index.php?option=com_content&view=article&id=270:the-nes-picture-processing-unit-ppu&catid=14)
+
+## Super Mario Bros
+Get Super Mario Bros (Mapper 0) running!
+
+Requires: CPU, Input, MemoryInterface, PPU
+
+Doesn't require APU to begin with (though the MemoryInterface should do something with writes to the APU zone...)
+
+## NES APU
+Get NES APU working. Probably SDL based initially. Wire it up to the MemoryInterface and get Super Mario Bros making noises!

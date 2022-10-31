@@ -1,0 +1,70 @@
+# OpenGL notes
+
+import Historical from "./_historical.md"
+
+<Historical />
+
+Useful links:
+
+- http://www.mrdoob.com/projects/glsl_sandbox/
+- http://www.opengl.org/sdk/docs/tutorials/ClockworkCoders/loading.php
+- http://www.arcsynthesis.org/gltut/Basics/Intro%20Graphics%20and%20Rendering.html
+- http://www.mbsoftworks.sk/index.php?page=tutorials&series=1&tutorial=2
+- https://launchpad.net/glew-cmake GLEW binaries!
+
+## Possible pixel grid drawing approaches in OpenGL
+
+- OpenGL 1.1: array of vertices, array of colours, call drawArrays
+- OpenGL w/ GLSL:
+  - VBO for vertices representing rects of pixels, dispatch colour grid as vertex attributes, outputting them as varyings (/“out”s) to the fragment shader
+  - Use a single rect (2 triangles), and colour it in the fragment shader, by passing an object thereto, and updating it each frame, for instance as:
+    - a texture, and glTex(Sub?)Image2D [some internets suggest it may be faster to invalidate the previously bound texture and allocate a new one each frame]
+    - [some other type of thing](http://stackoverflow.com/questions/7954927/glsl-passing-a-list-of-values-to-fragment-shader)
+  - Use a flat interpolation qualifier and the gloriously entitled Provoking Vertex to achieve constant colour across primitives [[1](https://www.opengl.org/wiki/Type_Qualifier_(GLSL)#Interpolation_qualifiers), [2](http://www.geeks3d.com/20130514/opengl-interpolation-qualifiers-glsl-tutorial/), [3](http://www.opengl.org/wiki/Provoking_Vertex#Provoking_vertex)] – sadly not ES-compatible
+    - Did get the flat shading successfully on the go with a tri-strip, wherein each single triangle was differently flat coloured.
+      - I thought it would treat the complete tri-strip as a single primitive, and flat colour the whole thing based on the provocative vertex.
+      - I was wrong; each independent tri in the strip independently gets fragment shaded independently, from its own independent provoking vertex, independently on an independent basis.
+    - zig-zag tri-strips, degenerate triangles. that will do nicely.
+      - first quad:
+        - {1, 1, 1} - first triangle
+        - 1 - second triangle
+      - second quad:
+        - 2 - third triangle
+        - 2 - fourth triangle
+      - third quad:
+        - 3 - fifth triangle
+        - 3 - sixth triangle
+- ...W :P 
+
+Oh, one thing you could do to be fancy would be to simply supply the width & height of the window, and the number of pixels W & H, to the vertex shader as a uniform. Then you could perform the scaling calculation in the shader – in C++-land, you’d then just need to update the uniform, rather than recalculating any geometry. sounds a nice idea. (GLSL is totes cool, really!)
+
+- Create an array of vertices, giving the corners of each pixel. For a display of W x H pixels, this will require (W+1) x (H+1) vertices.
+  - In W, the top left is set as the origin using glOrtho( ) with the bottom & top params switched around (see [`Window::setUpViewport()`](https://bitbucket.org/hallstein/w/src/131d727b91522aa95f66ddbb196c5ff80a05943f/Window.cpp?at=default)) nice!
+  - Could update the vertices on window resize, multiplying each x coord by `window_width/W` and each y coord by `window_height/H`. Scaling!
+- Create an array of elements to draw 1 quads per pixel, using the vertex array:
+  - To draw pixel `(i,j)` using a QUAD, the four elements (indices in the vertex data) are:
+    - `(W+1) * j + i`
+    - `(W+1) * j + i + 1`
+    - `(W+1) * (j + 1) + i`
+    - `(W+1) * (j+1) + i + 1`
+  - So we create an array of these, 4 per pixel:
+
+```c++
+    for (j=0; j < H, ++j)
+        for (i=0; i < W; ++i)
+            elements[j*W + i] = (W+1) * j + i;
+            elements[j*W + i + 1] = (W+1) * j + i + 1;
+            elements[j*W + i + 2] = (W+1) * (j+1) + i;
+        elements[j*W + i + 2] = (W+1) * (j+1) + i + 1;
+```
+
+- Create an array of colour values for each element. Since each 4 values are the same (across a single pixel, we have uniform colour!) we just want a W x H x 4 array of colours (say, for RGBA, a W x H x 16 array of floats).
+- To update a pixel, set the appropriate group of 4 sets of 4 values in the colour array to the required values. i.e. for pixel `i,j`:
+
+```c++
+    struct colour *c = colours[j*W + i];
+    c->r = 0.525;
+    c->g = 0.187;
+    c->b = 0.886;
+    c->a = 1.0;
+```
