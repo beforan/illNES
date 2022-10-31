@@ -1,21 +1,18 @@
-[![License](https://img.shields.io/badge/licence-ISC-blue.svg)](https://opensource.org/licenses/ISC)
-[![Build Status](https://travis-ci.org/beforan/illNES.svg?branch=develop)](https://travis-ci.org/beforan/illNES)
+[![License](https://img.shields.io/badge/licence-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 # illNES
 
 An ill-conceived NES emulator.
 
-# Definitions
+# 📂 Repo guide
 
-Just chucking these here for now, until they are moved to a home in the Wiki.
+## 🌿 Branches
 
-## MOS6502.
+This repository contains a number of "orphaned" branches, which are essentially primary branches for different parts of the project:
 
-The following terminology is used throughout the CPU code.
-
-- **Instruction** - represents an action the the cpu can take, usually on some memory address and/or CPU register
-- **Address** - An indexed location in RAM, or the index itself.
-- **Register** - essentially a fixed size variable that can hold a value. Some registers have special meaning.
-- **Mnemonic** - A 3 letter string that represents an instruction.
-- **Addressing Mode** - The mode by which the address for the instruction to operate on is acquired.
-- **Operation** - A combination of an Instruction and a given Addressing Mode.
-- **OpCode** - A byte value that represents a unique operation.
+| Branch | Description | Current |
+|-|-|-|
+| `main` | The current source code, including the application and documentation | ✔️ |
+| `gh-pages` | Hosted documentation | ✔️ |
+| `assembly` | Contains useful 6502 assembly source and binaries for testing | ✔️ |
+| `c++` | Now defunct C++ codebase | ❌ |
