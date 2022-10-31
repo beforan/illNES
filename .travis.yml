@@ -1,8 +1,0 @@
-language: csharp
-mono: none
-dotnet: 2.0.0
-dist: trusty
-script:
- - dotnet restore
- - dotnet build
- - dotnet test ./test/illNES.CPU.Test # we have to explicitly run individual test projects until dotnet test works better with solutions
